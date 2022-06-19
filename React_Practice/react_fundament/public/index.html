@@ -16,25 +16,22 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const items = ['Angular', 'React', 'Vue']
-        
-        //创建虚拟DOM
-        const VDOM = (
-            <div>
-                <h1>前端JS框架列表</h1>
-                <ul>
-                   {
-                    items.map((item,index)=>{
-                      return  <li key={index}>{item}</li>
-                    })
-                   }
-                </ul>
-            </div>
-        )
+        function MyComponent(props){
+            return <h1>我是用函数定义的组件（适用于{props.name}的定义）</h1>;
 
-        //渲染虚拟DOM到页面
-    
-        ReactDOM.render(VDOM, document.getElementById('root'))
+        }
+
+
+        // class MyComponent extends React.Component{
+        //     render() {
+        //         return(
+        //             <h1>我是用类定义的组件（适用于【复杂组件】的定义）</h1>
+        //         )
+        //     }
+        // }
+
+        ReactDOM.render(<MyComponent name={'简单组件'}/>, document.getElementById('root'))
+
     </script>
 </body>
 
