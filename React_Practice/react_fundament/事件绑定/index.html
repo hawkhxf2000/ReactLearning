@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    // function MyComponent(props){
+    //     return <h1>我是用函数定义的组件（适用于{props.name}的定义）</h1>;
+    //
+    // }
+
+
+    class MyComponent extends React.Component {
+        constructor(props) {
+            super(props);      //使用父组件的构造参数
+            this.state = {    //state初始化
+                isHot: true
+            };
+            // this.changeWeather = this.changeWeather.bind(this);    //事件绑定
+        }
+
+        //
+       changeWeather =() => {  //如果不使用事件绑定，也可以用这种箭头函数使得changeWeather绑定到组件实例对象上
+            this.setState(prevStates=>({      //修改state必须使用setState函数，其中prevStates是指前一次的state
+                isHot: !prevStates.isHot
+            }))
+        }
+
+        render() {
+            return (
+                // <h1>我是用类定义的组件（适用于{this.props.name}的定义）</h1>
+                <div>
+                    <h1>今天天气很{this.state.isHot?'炎热':'凉爽'}</h1>
+                    <button onClick={this.changeWeather}>改变天气</button>
+                </div>
+            )
+        }
+    }
+
+    // ReactDOM.render(<MyComponent name={'简单组件'}/>, document.getElementById('root'))
+    const root = ReactDOM.createRoot(document.getElementById('root'))
+    const element = <MyComponent name={'复杂组件'}/>
+    root.render(element)
+
+</script>
+</body>
+
+</html>
