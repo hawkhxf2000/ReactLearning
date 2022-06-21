@@ -223,3 +223,58 @@ render() {
 ~~~
 上述两种方式是等价的，分别通过箭头函数和 Function.prototype.bind 来实现。
 
+## 条件渲染
+与Vue使用v-if类似，React也是在类组件的render函数或函数组件的return渲染中使用if来进行条件判断渲染。进行判断的值一般放在states中。上面的
+事件绑定案例中的渲染就可以改为：
+~~~jsx
+render() {
+    let currentWeather
+    if(this.state.isHot)
+        currentWeather = '炎热'
+    else
+        currentWeather = '凉爽'
+    return (
+
+        <div>
+            <h1>今天天气很{currentWeather}</h1>
+            <button onClick={this.changeWeather}>改变天气</button>
+        </div>
+    )
+}
+~~~
+### 条件判断的两种替代方法
+- &&与运算符
+~~~jsx
+function Mailbox(props) {
+    const unreadMessages = props.unreadMessages;
+    return (
+        <div>
+            <h1>Hello!</h1>
+            {unreadMessages.length > 0 &&
+                <h2>
+                    You have {unreadMessages.length} unread messages.
+                </h2>
+            }
+        </div>
+    );
+}
+
+const messages = ['React', 'Re: React', 'Re:Re: React'];
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Mailbox unreadMessages={messages} />);
+~~~
+在这个例子中，当message数组中没有内容，即unreadMessage.length = 0时，由于第一个表达式unreadMessages.length>0得到false,因此在&&后面的结构就不会显示，从而起到控制输出的作用
+
+- 三目运算符
+上面的例子可以改为：
+~~~jsx
+return (
+        <div>
+            <h1>Hello!</h1>
+            {unreadMessages.length > 0? <h2>You have {unreadMessages.length} unread messages.</h2> : null
+            }
+        </div>
+    );
+~~~
+这个三目表达式表示当unreadMessages.length > 0成立时输出h2中的内容，否则不渲染

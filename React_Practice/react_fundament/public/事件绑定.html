@@ -39,10 +39,15 @@
         }
 
         render() {
+            let currentWeather
+            if(this.state.isHot)
+                currentWeather = '炎热'
+            else
+                currentWeather = '凉爽'
             return (
-                // <h1>我是用类定义的组件（适用于{this.props.name}的定义）</h1>
+
                 <div>
-                    <h1>今天天气很{this.state.isHot?'炎热':'凉爽'}</h1>
+                    <h1>今天天气很{currentWeather}</h1>
                     <button onClick={this.changeWeather}>改变天气</button>
                 </div>
             )
