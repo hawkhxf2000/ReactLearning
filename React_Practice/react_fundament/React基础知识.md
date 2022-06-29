@@ -403,3 +403,59 @@ function ShowList(props) {
         }
     }
 ~~~
+## 受控组件与非受控组件
+### 非受控组件
+组件中的输入项，如input, checkbox等无法进行实时更新，需要使用ref来现用现取的组件即为非受控组件
+~~~jsx
+ class Login extends React.Component {
+        //函数体
+        handleSumbit = (event) => {
+            event.preventDefault() //阻止表单提交
+            const {username, password} = this
+            // 模板字符串形式
+            alert(`你输入的用户名是：${username.value},你输入的密码是：${password.value}`)
+        }
+
+        render() {
+            return (
+                <form action="http://www.atguigu.com" onSubmit={this.handleSumbit}>
+                    用户名：<input ref={c => this.username = c} type="text" placeholder="username" name="username"/>
+                    密码：<input ref={c => this.password = c} type="password" placeholder="password" name="password"/>
+                    <button>登录</button>
+                </form>
+            )
+        }
+    }
+~~~
+### 受控组件
+组件中的输入项，如input, checkbox等可以实时更新到组件状态中的组件叫受控组件，类似Vue中的双向绑定
+~~~jsx
+class Login extends React.Component {
+        //初始化组件状态
+        state = {
+            username: '',
+            password: ''
+        }
+
+        saveUsername = (event) =>{
+            this.setState({username:event.target.value})
+        }
+        savePassword = (event) =>{
+            this.setState({password:event.target.value})
+        }
+        //回调函数
+        handleSubmit = (event) =>{
+            const {username,password} = this.state
+            alert(`你输入的用户名是：${username},你输入的密码是：${password}`)
+        }
+
+        render() {
+            return (
+                <form onSubmit = {this.handleSubmit}>
+                    用户名：<input onChange={this.saveUsername} type="text" placeholder="username" name="username"/>
+                    密码：<input onChange={this.savePassword} type="password" placeholder="password" name="password"/>
+                    <button>登录</button>
+                </form>
+            )
+        }
+~~~

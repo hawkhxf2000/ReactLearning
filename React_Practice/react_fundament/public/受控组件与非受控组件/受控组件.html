@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>受控组件</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    //创建组件
+    class Login extends React.Component {
+        //初始化组件状态
+        state = {
+            username: '',
+            password: ''
+        }
+
+        saveUsername = (event) =>{
+            this.setState({username:event.target.value})
+        }
+        savePassword = (event) =>{
+            this.setState({password:event.target.value})
+        }
+        //回调函数
+        handleSubmit = (event) =>{
+            const {username,password} = this.state
+            alert(`你输入的用户名是：${username},你输入的密码是：${password}`)
+        }
+
+        render() {
+            return (
+                <form onSubmit = {this.handleSubmit}>
+                    用户名：<input onChange={this.saveUsername} type="text" placeholder="username" name="username"/>
+                    密码：<input onChange={this.savePassword} type="password" placeholder="password" name="password"/>
+                    <button>登录</button>
+                </form>
+            )
+        }
+    }
+    ReactDOM.render(<Login/>, document.getElementById('root'))
+</script>
+</body>
+</html>
