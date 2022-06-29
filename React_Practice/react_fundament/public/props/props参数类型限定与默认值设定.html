@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+class Person extends React.Component{
+
+    //使用static修饰符定义类静态成员变量，在这里使用可以对所有的props进行参数类型限定和设定默认值
+    //使用prop-Types库进行参数类型限定
+    static propTypes = {
+        name: PropTypes.string.isRequired,  //限制name需要为字符串，且必填
+        age: PropTypes.number,
+        sex: PropTypes.string,
+        speak: PropTypes.func  //限定函数必须使用func而不是function，以避免与关键字function冲突
+    }
+
+    //设定默认值
+    static defaultProps = {
+        age: 18,
+        sex: "female"
+    }
+
+    render() {
+        return (
+            <div>
+            <h2>姓名： {this.props.name}</h2>
+            <h2>年龄：{this.props.age}</h2>
+            <h2>性别：{this.props.sex}</h2>
+            </div>
+        )
+    }
+}
+
+function speak(){
+    console.log("我说话了")
+}
+
+//React 最新版的根节点渲染书写方法
+ const p = {name:'Tom', age: 18,sex:'male'}
+ const root = ReactDOM.createRoot(document.getElementById('root'))
+ // const element = <Person {...p} /> //使用ES6中的扩展符，相当于<Person name='Tom' age=18 sex='male' />
+ const element = <Person name={"张三"} speak={speak}/> //传入参数不齐全时，会使用指定的默认值
+
+root.render(element)
+</script>
+</body>
+</html>

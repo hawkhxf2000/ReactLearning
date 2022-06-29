@@ -40,10 +40,12 @@
 
         addItem(){
             // const id = useNanoid.useNanoid()
-            console.log(id)
             const value = document.getElementById('todoItemInput').value
+            const list = this.state.todoItems;
+            list.push(value)
             this.setState(
-                {todoItems: [...this.state.todoItems,value]}  //使用...扩展符将todoItems展开，然后将value加入array
+                // {todoItems: [...this.state.todoItems,value]}  //使用...扩展符将todoItems展开，然后将value加入array
+                {todoItems:list}
             )
         }
 

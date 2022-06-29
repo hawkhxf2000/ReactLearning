@@ -121,7 +121,7 @@ ReactDOM.render(<MyComponent/>, document.getElementById('root'))
 
 ## 组件的props
 
-组件可以通过组件实例对象身上的props从组件外部向组件内传递参数
+### props: 组件可以通过组件实例对象身上的props从组件外部向组件内传递参数
 
 ~~~jsx
 class MyComponent extends React.Component {
@@ -138,6 +138,43 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 const element = <MyComponent name={'复杂组件'}/>
 root.render(element)
 ~~~
+### 传递多个props
+将属性转化为对象，在babel和React双重作用下使用...obj可以展开对象进行遍历
+~~~jsx
+let p = {name:'Tom', age:'18',sex:'male'}
+const root=ReactDOM.createRoot(document.getElementById('root'))
+const element = <Person {...p} /> //相当于<Person name='Tom' age=18 sex='male' />
+~~~
+### props类型限定与默认值设定：
+给组件类加propTypes规则属性
+- propTypes方法： 先引入prop-types库，需要在头文件中引入
+~~~
+<script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+~~~
+
+~~~jsx
+export default function Hello(props) {
+    return <div>
+        Hello, {props.name}.
+        You are {props.age} years old.
+        {props.registered? 'You have registered.': 'You havenot registered yet.'}
+    </div>;
+}
+
+//类型限定
+Hello.propTypes ={
+    name: PropTypes.string,
+    age: PropTypes.number,
+    registered: PropTypes.boolean
+}
+
+//设定默认值
+Hello.defaultProps ={
+    age: 18,
+    registered: true
+}
+~~~
+
 
 ## 组件的状态(state)
 
@@ -145,15 +182,23 @@ state是组件的内部属性，用于在组件内部进行数据传递与修改
 
 ### state的初始化
 
-只能使用组件构造函数来初始化steate
+官方文档中使用组件构造函数来初始化state
 
 ~~~jsx
+class App extends React.Component{
 constructor(props)
 {
     super(props);
     this.state = {    //state初始化
         isHot: true
     };
+}
+~~~
+**如果state初始化时不需要从外部数据传值，也可以使用state初始化的简写方式**
+~~~jsx
+class App extends React.Component{
+    state={isHot:true}
+}
 ~~~
 
 ### 修改state中属性
@@ -164,6 +209,33 @@ constructor(props)
 this.setState(prevStates => ({      //修改state必须使用setState函数，其中prevStates是指前一次的state
     isHot: !prevStates.isHot
 }))
+~~~
+
+## ref与事件处理
+### 字符串形式ref
+使用this.refs.xxx 来获取ref所在的真实DOM
+字符串形式的ref已被高版本React弃用
+~~~jsx
+const {input1} = this.refs
+alert(input1.value)
+......
+<input ref="input1" type="text" placeholder="点击按钮提示数据"/>
+~~~
+### 函数形式ref
+在render方法的节点中使用箭头函数来将属性名绑定到this组件实例对象上
+~~~jsx
+const {input1} =this
+alert(input1.value)
+......
+<input ref={(currentNode) =>{this.input1 = currentNode}} type="text" placeholder="点击按钮提示数据"/>
+~~~
+### createRefs容器形式
+使用React.createRefs()方法创建一个容器，将ref所在的节点放到这个容器中  
+一个容器只能容纳一个节点，如果需要获取多个节点需要创建多个容器
+~~~jsx
+myRef = React.createRef()
+......
+<input ref={this.myRef} type="text"/> 
 ~~~
 ## 事件绑定与处理
 在组件中定义事件（方法），然后在Constructor中使用bind(this)将事件绑定到组件实例对象上
@@ -176,13 +248,14 @@ constructor(props){
     this.changeWeather = this.changeWeather.bind(this);
 }
 
+
 changeWeather(){
     this.setState(prevStates => ({      //修改state必须使用setState函数，其中prevStates是指前一次的state
         isHot: !prevStates.isHot
     }))
 }
 ~~~
-如果不在构造器中绑定事件，也可以使用class fields语法在方法定义时使用箭头函数来将事件绑定到组件实例上
+如果不在构造器中绑定事件，也可以使用class fields语法在方法定义时使用赋值语句＋箭头函数来将事件绑定到组件实例上
 ~~~jsx
 changeWeather = () =>{
     this.setState(prevStates =>({
@@ -190,6 +263,8 @@ changeWeather = () =>{
     }))
 }
 ~~~
+**如果state初始化与事件绑定都使用简写形式，那么构造器没有必要使用**
+****
 在render()方法中绑定方法到标签
 ~~~jsx
  render() {
@@ -278,3 +353,53 @@ return (
     );
 ~~~
 这个三目表达式表示当unreadMessages.length > 0成立时输出h2中的内容，否则不渲染
+
+## 循环遍历列表
+1. 使用Array.map函数，在进行列表遍历的同时构建一个虚拟DOM列表，然后将其放入ul或ol中    
+2. 在虚拟DOM列表中每项都需要一个key作为特有标识，可以使用列表的index属性，但会出现问题，所以最好是给列表单独分配一个id  
+3. 组件中的state中的变量不能直接进行修改，必须使用setState方法来修改。因此下面代码中如果直接使用this.state.todoItems.push()来获得一个新的数组，只会返回数组长度，因为这是在试图在todoItems中新增一个元素。但如果使用...
+扩展符就可以将todoItems转化为一个数组，从而加入新的值。同理也可以将this.state.todoItems赋给一个变量，如const list = this.state.todoItems,然后使用list.push()也可以获得同样的效果。
+~~~js
+function ShowList(props) {
+        const todoItems = props.todoItems;
+        const todoList = todoItems.map((title,index) => (
+            <li key={index}>{title}</li>
+        ))
+        return (
+            <ul>{todoList}</ul>
+        )
+    }
+
+    class TodoList extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                todoItems: []
+            }
+            this.addItem = this.addItem.bind(this)
+        }
+
+        addItem() {
+            console.log(id)
+            const value = document.getElementById('todoItemInput').value
+            //方法一：将state.todoItems赋值给另外一个变量，对这个变量做push()处理
+
+            const list = this.state.todoItems;
+            list.push(value)
+            this.setState(
+                // {todoItems: [...this.state.todoItems,value]}  //方法二： 使用...扩展符将todoItems展开，然后将value加入array
+                {todoItems: list}
+            )
+        }
+
+        render() {
+            return (
+                <div>
+                    <input type="text" id="todoItemInput" placeholder="输入待办事项"/>
+                    <button onClick={this.addItem}>提交</button>
+                    <ShowList todoItems={this.state.todoItems}/>
+                </div>
+            );
+        }
+    }
+~~~

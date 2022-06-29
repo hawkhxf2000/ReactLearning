@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回调函数形式ref</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+<script type="text/babel">
+// 字符串形式的ref已经被高版本React弃用
+    class Demo extends React.Component{
+        /*
+        React.createRef调用后可以返回一个容器，该容器可以存储被ref所标识的节点,而且只能容纳一个ref节点，如果需要拿到多个节点就需要创建多个容器
+        * */
+        myRef = React.createRef()
+        showData1 = () =>{
+            alert(this.myRef.current.value)
+        }
+
+        render(){
+            return (
+                <div>
+                    <input type="text" ref={this.myRef}/>
+                    <button onClick={this.showData1}>点我提示左侧的数据</button>
+                </div>
+            )
+        }
+    }
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Demo />);
+
+</script>
+</body>
+
+</html>

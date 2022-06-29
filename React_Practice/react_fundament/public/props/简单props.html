@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+ //函数组件中props的基本写法
+ function MyComponent(props){
+     return <h1>我是用函数定义的组件（适用于{简单props.name}的定义）</h1>;  //此处不能加回车，否则无显示
+
+ }
+
+//类组件中props的基本写法
+// class MyComponent extends React.Component {  //类组件的props会自动绑定到实例身上
+//     render() {
+//         return (
+//             <h1>我是用类定义的组件（适用于{this.props.name}的定义）</h1>
+//         )
+//     }
+// }
+
+//React 最新版的根节点渲染书写方法
+const root = ReactDOM.createRoot(document.getElementById('root'))
+//此处的<MyComponent name={'复杂组件'}/>相当于利用构造函数构造了一个新的MyComponent的实例对象，并在props属性中存入一个name:'复杂组件'的键值对
+const element = <MyComponent name={'简单组件'}/>
+root.render(element)
+</script>
+</body>
+</html>

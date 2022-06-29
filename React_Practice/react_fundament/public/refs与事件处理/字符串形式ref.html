@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串形式ref</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+<script type="text/babel">
+// 字符串形式的ref已经被高版本React弃用
+    class Demo extends React.Component{
+        showData = () =>{
+            const {input1} = this.refs
+            alert(input1.value)
+        }
+        render(){
+            return (
+                <div>
+                    <input ref="input1" type="text" placeholder="点击按钮提示数据"/>
+                    <button onClick={this.showData}>点我提示左侧的数据</button>
+                    <input type="text" placeholder="失去焦点提示数据"/>
+                </div>
+            )
+        }
+    }
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Demo />);
+
+</script>
+</body>
+
+</html>

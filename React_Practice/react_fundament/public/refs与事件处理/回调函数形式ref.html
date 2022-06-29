@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回调函数形式ref</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    // 字符串形式的ref已经被高版本React弃用
+    class Demo extends React.Component{
+
+        showData1 = () =>{
+            const {textInput} = this
+            console.log(textInput)
+            alert(textInput.value)
+        }
+        showData2 = () =>{
+            const {input2} = this   //使用结构赋值，等同于input2 = this.input2
+            alert(input2.value)
+        }
+
+        setTextInputRef = (element) =>{
+            this.textInput = element
+            console.log(element)
+        }
+        render(){
+            return (
+                <div>
+                    {/*<input ref={(currentNode) => {
+                        this.input1 = currentNode
+                    }} type="text" placeholder="点击按钮提示数据"/> */}  {/* 内联样式回调函数形式*/}
+                    <input type="text" ref={this.setTextInputRef}/>  {/*函数调用的回调函数形式*/}
+                    <button onClick={this.showData1}>点我提示左侧的数据</button>
+                    {/* 箭头函数左边只有一个参数时小括号可以省略，右边{}中只有一句语句时{}也可以省略 */}
+                    <input ref={currentNode => this.input2 = currentNode} type="text" placeholder="失去焦点提示数据" onBlur={this.showData2}/>
+                </div>
+            )
+        }
+    }
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Demo />);
+
+</script>
+</body>
+
+</html>
